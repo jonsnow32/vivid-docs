@@ -1,0 +1,30 @@
+input: .
+output: .retype
+url: # Add your website address here
+branding:
+  title: Vivid Fusion
+  label: Docs
+
+
+links:
+  - text: Git
+    link: https://github.com/jonsnow32/vividfusion
+    icon: mark-github
+
+  - text: Issues
+    link: https://github.com/jonsnow32/vividfusion/issues
+    icon: comment-discussion
+    target: blank
+
+
+
+footer:
+
+  links:
+    - text: About
+      link: about.md
+      icon: question
+
+    - text: License (UPL)
+      link: license.md
+      icon: shield-check
