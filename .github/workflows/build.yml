@@ -3,13 +3,13 @@ name: Deploy Retype to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+      - main
 
 permissions:
   contents: read
   pages: write
-  id-token: write
-  
+  id-token: write  # Required for GitHub Pages
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,14 +29,19 @@ jobs:
       - name: Build Retype Site
         run: npx retype build
 
-      - name: Set Git User
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload Retype Site as Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          folder: .retype  # Retype outputs the built site here
+          path: .retype  # Upload the built site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
