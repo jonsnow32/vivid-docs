@@ -10,7 +10,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
+
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -22,20 +22,21 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: retypeapp/action-build@latest
+      - uses: retypeapp/action-build@v1
         id: retypebuild
 
-      - name: Inject custom css and js
+      - name: Inject custom CSS and JS
         run: |
           cat .inject/style.css >> ${{ steps.retypebuild.outputs.retype-output-path }}/resources/css/retype.css
           cat .inject/code.js >> ${{ steps.retypebuild.outputs.retype-output-path }}/resources/js/retype.js
-      
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1.0.8
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.retypebuild.outputs.retype-output-path }}
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
