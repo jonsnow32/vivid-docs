@@ -1,11 +1,16 @@
 input: .
 output: .retype
+
+breadcrumb:
+  home: ":icon-home:"
+  
 url: # Add your website address here
 branding:
   title: Vivid Fusion
   label: Docs
 
-
+exclude:
+  - changelog.md
 links:
   - text: Git
     link: https://github.com/jonsnow32/vividfusion

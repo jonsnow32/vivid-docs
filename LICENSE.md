@@ -1,3 +1,7 @@
+---
+icon: key
+label: License
+---
 # Unabandon Public License (UPL)
 
 ```
