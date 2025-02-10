@@ -1,42 +1,31 @@
-name: Publish Retype powered website to GitHub Pages
+name: Deploy Retype to GitHub Pages
 
 on:
   push:
-    branches: [master]
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches:
+      - main  # Change this to your default branch
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: retypeapp/action-build@v1
-        id: retypebuild
-
-      - name: Inject custom CSS and JS
-        run: |
-          cat .inject/style.css >> ${{ steps.retypebuild.outputs.retype-output-path }}/resources/css/retype.css
-          cat .inject/code.js >> ${{ steps.retypebuild.outputs.retype-output-path }}/resources/js/retype.js
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ${{ steps.retypebuild.outputs.retype-output-path }}
+          node-version: '20'
+
+      - name: Install Retype
+        run: npm install --save-dev retypeapp
+
+      - name: Build Retype Site
+        run: npx retype build
 
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: main
+          folder: .retype  # Retype outputs the built site here
